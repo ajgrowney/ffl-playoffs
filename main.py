@@ -32,8 +32,7 @@ elif sys.argv[1] == "week":
     current_week_rush_df = pd.read_csv(form_csv_path(year,week,"rushing"))
     current_week_receiving_df = pd.read_csv(form_csv_path(year,week,"receiving"))
 
-    for game_url in [game_urls[0]]:
-        print(current_week_receiving_df)
+    for game_url in game_urls:
         game = (scrape_game_url(game_url))
         game_pass_df = stats_to_dataframe(game.passing_data, game.passing_categories, "passing", week, year)
         game_rush_df = stats_to_dataframe(game.rushing_data, game.rushing_categories, "rushing", week, year)
@@ -41,14 +40,10 @@ elif sys.argv[1] == "week":
         current_week_pass_df = pd.concat([current_week_pass_df,game_pass_df], ignore_index=True).drop_duplicates().reset_index(drop=True)
         current_week_rush_df = pd.concat([current_week_rush_df,game_rush_df], ignore_index=True).drop_duplicates().reset_index(drop=True)
         current_week_receiving_df = pd.concat([current_week_receiving_df,game_receiving_df], ignore_index=True).drop_duplicates().reset_index(drop=True)
-        print(game_receiving_df)
-        print(current_week_receiving_df)
-        current_week_receiving_df.to_csv(form_csv_path(year,week,"receiving"),index=False)
 
-
-    # current_week_pass_df.to_csv(form_csv_path(year,week,"passing"),index=False)
-    # current_week_rush_df.to_csv(form_csv_path(year,week,"rushing"),index=False)
-    # current_week_receiving_df.to_csv(form_csv_path(year,week,"receiving"),index=False)
+    current_week_pass_df.to_csv(form_csv_path(year,week,"passing"),index=False)
+    current_week_rush_df.to_csv(form_csv_path(year,week,"rushing"),index=False)
+    current_week_receiving_df.to_csv(form_csv_path(year,week,"receiving"),index=False)
 
 
 elif sys.argv[1] == "year": print(scrape_week_url(form_year_week_url(2019,2)))
