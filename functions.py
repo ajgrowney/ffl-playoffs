@@ -7,11 +7,13 @@ from bs4 import BeautifulSoup
 class GameObject:
     # Param { ResultSet } stats_tables - containing all the tables needed for Game data
     # Param { Dictionary } table_ids - keys: [rushing, passing, receiving], values: id used by pro-football-refs
-    def __init__(self, stat_tables, table_ids):
+    # Param { Set } teams_abbrev - Two teams abbreviations playing in the game
+    def __init__(self, stat_tables, table_ids, teams_abbrev):
+
         for table in stat_tables:
-            if table['id'] == table_ids['passing']: self.passing_categories, self.passing_data = scrape_data_table(table,"passing")
-            elif table['id'] == table_ids['rushing']: self.rushing_categories, self.rushing_data = scrape_data_table(table,"rushing")
-            elif table['id'] == table_ids['receiving']: self.receiving_categories, self.receiving_data = scrape_data_table(table,"receiving")
+            if table['id'] == table_ids['passing']: self.passing_categories, self.passing_data = scrape_data_table(table,"passing", teams_abbrev)
+            elif table['id'] == table_ids['rushing']: self.rushing_categories, self.rushing_data = scrape_data_table(table,"rushing", teams_abbrev)
+            elif table['id'] == table_ids['receiving']: self.receiving_categories, self.receiving_data = scrape_data_table(table,"receiving", teams_abbrev)
 
 # Param: { Dictionary } stats_dict - dictionary containing all stats for a week
 # Param: { List<String> } stat_categories - list of columns for the dataframe
@@ -25,7 +27,7 @@ def stats_to_dataframe(stats_dict: dict, stat_categories: list, stat_category_na
 
 # Return: { List } table_stats - List of all the statistics recorded in the table
 # Return: { Dictionary } player_stats - Dictionary of objects holding each players stats from the game
-def scrape_data_table(data_table, category):
+def scrape_data_table(data_table, category, teams):
     table_stats, player_stats = [], {}
     
     # Table Headers: List of all stats being recorded
@@ -43,14 +45,17 @@ def scrape_data_table(data_table, category):
     for player in player_rows:
         player_id, stats = "", {}
 
-        # Fill Player's ID and Stats
+        # Fill Player's ID, Opponent, and Stats
         for data_row in player:
+            stats[data_row['data-stat']] = data_row.text
+
             if data_row['data-stat'] == 'player':
                 player_id, name = data_row['data-append-csv'], data_row.find('a').text
-                stats[data_row['data-stat']] = data_row.text
                 stats['player_id'] = player_id
-            else:
-                stats[data_row['data-stat']] = data_row.text
+            
+            elif data_row['data-stat'] == 'team':
+                opponent = teams - set([ stats[data_row['data-stat']]])
+                stats['opponent'] = opponent.pop()               
         
         # Write Player Stats to Dictionary
         player_stats[player_id] = stats
@@ -73,8 +78,18 @@ def scrape_game_url(url):
     html = html.replace('<!--','').replace('-->','')
     SoupObject = BeautifulSoup(html,"html.parser")
     
+    table_ids = {
+        "passing": "passing_advanced",
+        "rushing": "rushing_advanced",
+        "receiving": "receiving_advanced"
+    }
     category_tables = SoupObject.find_all('table', {"id": list(table_ids.values())})
-    game = GameObject(category_tables, table_ids)
+    teams_container = SoupObject.find('table', {'id': "team_stats"})
+    home_team = teams_container.find('th', {"data-stat": "home_stat"}).text
+    road_team = teams_container.find('th', {"data-stat": "vis_stat"}).text
+    teams = set([home_team,road_team])
+    # Special way to grab teams from the scorebox of their pages
+    game = GameObject(category_tables, table_ids, teams)
     return game
 
 
