@@ -5,28 +5,28 @@ import requests
 from bs4 import BeautifulSoup
 
 class GameObject:
-    # Param { ResultSet } stats_tables - containing all the tables needed for Game data
-    # Param { Dictionary } table_ids - keys: [rushing, passing, receiving], values: id used by pro-football-refs
-    # Param { Set } teams_abbrev - Two teams abbreviations playing in the game
-    def __init__(self, stat_tables, table_ids, teams_abbrev):
 
+    # Param: stats_tables { ResultSet } - containing all the tables needed for Game data
+    # Param: table_ids { Dictionary } - keys: [rushing, passing, receiving], values: id used by pro-football-refs
+    # Param: teams_abbrev { Set } - Two teams abbreviations playing in the game
+    def __init__(self, stat_tables, table_ids, teams_abbrev):
         for table in stat_tables:
             if table['id'] == table_ids['passing']: self.passing_categories, self.passing_data = scrape_data_table(table,"passing", teams_abbrev)
             elif table['id'] == table_ids['rushing']: self.rushing_categories, self.rushing_data = scrape_data_table(table,"rushing", teams_abbrev)
             elif table['id'] == table_ids['receiving']: self.receiving_categories, self.receiving_data = scrape_data_table(table,"receiving", teams_abbrev)
 
-# Param: { Dictionary } stats_dict - dictionary containing all stats for a week
-# Param: { List<String> } stat_categories - list of columns for the dataframe
-# Param: { String } stat_category_name - category of the stats (e.g. "rushing", "receiving", "passing")
-# Param: { Int } stat_week - week the stats happened (e.g. 2019)
-# Param: { Int } stat_year - year the stats happened (e.g. 1)
+# Param: stats_dict { Dictionary } - dictionary containing all stats for a week
+# Param: stat_categories { List<String> } - list of columns for the dataframe
+# Param: stat_category_name { String } - category of the stats (e.g. "rushing", "receiving", "passing")
+# Param: stat_week { Int } - week the stats happened (e.g. 2019)
+# Param: stat_year { Int } - year the stats happened (e.g. 1)
 # Return: { Pandas.DataFrame } - Dataframe that will be written to and read from csv formats in the data folders
 def stats_to_dataframe(stats_dict: dict, stat_categories: list, stat_category_name: str, stat_week: int, stat_year: int):
     df = pd.DataFrame.from_dict(stats_dict,orient='index')
     return df
 
-# Return: { List } table_stats - List of all the statistics recorded in the table
-# Return: { Dictionary } player_stats - Dictionary of objects holding each players stats from the game
+# Return: table_stats { List } - List of all the statistics recorded in the table
+# Return: player_stats { Dictionary } - Dictionary of objects holding each players stats from the game
 def scrape_data_table(data_table, category, teams):
     table_stats, player_stats = [], {}
     
@@ -63,8 +63,8 @@ def scrape_data_table(data_table, category, teams):
     return table_stats, player_stats
 
 
-# Param: { String } url - pro-football-reference url for a game
-# Return: { GameObject }  game - holds the game data from that url
+# Param: url { String } - pro-football-reference url for a game
+# Return: { GameObject }  holds the game data from that url
 def scrape_game_url(url):
     table_ids = {
         "passing": "passing_advanced",
@@ -94,7 +94,7 @@ def scrape_game_url(url):
 
 
 
-# Param: { String } - url to scrape for the week's boxscores
+# Param: url { String } - to scrape for the week's boxscores
 # Return: { List<String> } - list of urls formed as '/boxscores/{gameid}'
 def scrape_week_url(url):
     response = requests.get(url)
