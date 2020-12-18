@@ -52,6 +52,5 @@ elif stat_type == "receiving":
 
 df = get_season_stat(year,start_week,end_week,stat_type)
 df = df.loc[df["player"] == player]
-print(df.describe())
 plot_df(df[stat_list],stat_list[0],stat_list[1],stat_list[2])
 
