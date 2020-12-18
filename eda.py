@@ -35,9 +35,21 @@ def plot_df(df,x_axis,y_axis, annotation):
     plt.show()
 
 
-df = get_season_stat(2019,14,"rushing")
-df = df.loc[df["player"] == "Sony Michel"]
-stat_list = ["rush_att","rush_yds","opponent"]
+year = 2019
+week = 14
+player = sys.argv[1]
+stat_type = sys.argv[2].lower()
+
+if stat_type == "rushing":
+    stat_list = ["rush_att","rush_yds","opponent"]
+elif stat_type == "passing":
+    stat_list = ["pass_att", "pass_yds", "opponent"]
+elif stat_type == "receiving":
+    stat_list = ["targets", "rec_yds", "opponent"]
+
+
+df = get_season_stat(2019,14,stat_type)
+df = df.loc[df["player"] == player]
 
 plot_df(df[stat_list],stat_list[0],stat_list[1],stat_list[2])
 

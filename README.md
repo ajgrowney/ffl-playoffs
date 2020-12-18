@@ -13,7 +13,7 @@
 
 
 ### Advanced Rushing Data Columns:
-    player, player_id, team, rush_att, rush_yds, rush_first_down, rush_yds_before_contact, rush_yds_bc_per_rush, rush_yac, rush_yac_per_rush, rush_broken_tackles, rush_broken_tackles_per_rush
+    player,player_id,team,rush_att,rush_yds,rush_first_down,rush_yds_before_contact,rush_yds_bc_per_rush,rush_yac,rush_yac_per_rush,rush_broken_tackles,rush_broken_tackles_per_rush
 
 ### Advanced Receiving Data Columns:
     player, player_id, team, targets, rec, rec_yds, rec_first_down, rec_air_yds, rec_air_yds_per_rec, rec_yac, rec_yac_per_rec, rec_broken_tackles, rec_broken_tackles_per_rec, rec_drops, rec_drop_pct

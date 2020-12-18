@@ -3,7 +3,7 @@ rushingcols="player,player_id,team,opponent,rush_att,rush_yds,rush_first_down,ru
 receivingcols="player,player_id,team,opponent,targets,rec,rec_yds,rec_first_down,rec_air_yds,rec_air_yds_per_rec,rec_yac,rec_yac_per_rec,rec_broken_tackles,rec_broken_tackles_per_rec,rec_drops,rec_drop_pct"
 
 mkdir data-"$1"
-touch data-"$1"/"$1"-{passing,receiving,rushing,defensive}-week-{1..16}.csv
+touch data-"$1"/"$1"-{passing,receiving,rushing,defensive}-week-{1..17}.csv
 
 for f in data-"$1"/*passing*; do echo $f; echo $passingcols > $f; done
 for f in data-"$1"/*rushing*; do echo $f; echo $rushingcols > $f; done
