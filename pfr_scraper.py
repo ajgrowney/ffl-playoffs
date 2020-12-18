@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+
 class GameObject:
 
     # Param: stats_tables { ResultSet } - containing all the tables needed for Game data
@@ -11,9 +12,13 @@ class GameObject:
     # Param: teams_abbrev { Set } - Two teams abbreviations playing in the game
     def __init__(self, stat_tables, table_ids, teams_abbrev):
         for table in stat_tables:
-            if table['id'] == table_ids['passing']: self.passing_categories, self.passing_data = scrape_data_table(table,"passing", teams_abbrev)
-            elif table['id'] == table_ids['rushing']: self.rushing_categories, self.rushing_data = scrape_data_table(table,"rushing", teams_abbrev)
-            elif table['id'] == table_ids['receiving']: self.receiving_categories, self.receiving_data = scrape_data_table(table,"receiving", teams_abbrev)
+            if table['id'] == table_ids['passing']: 
+                self.passing_categories, self.passing_data = scrape_data_table(table,"passing", teams_abbrev)
+            elif table['id'] == table_ids['rushing']: 
+                self.rushing_categories, self.rushing_data = scrape_data_table(table,"rushing", teams_abbrev)
+            elif table['id'] == table_ids['receiving']: 
+                self.receiving_categories, self.receiving_data = scrape_data_table(table,"receiving", teams_abbrev)
+
 
 # Param: stats_dict { Dictionary } - dictionary containing all stats for a week
 # Param: stat_categories { List<String> } - list of columns for the dataframe
@@ -64,7 +69,7 @@ def scrape_data_table(data_table, category, teams):
 
 
 # Param: url { String } - pro-football-reference url for a game
-# Return: { GameObject }  holds the game data from that url
+# Return: { GameObject } - holds the game data from that url
 def scrape_game_url(url):
     table_ids = {
         "passing": "passing_advanced",

@@ -13,12 +13,13 @@ def get_csv_data(year, week, stat):
     return pass_df
 
 # Param: year { Integer } - Year to get the stat from
-# Param: week { Integer } - Latest week to get data from 1 -> week
+# Param: start_week { Integer } - Latest week to get data from 1 -> week
+# Param: end_week { Integer } - Latest week to get data from 1 -> week
 # Param: stat { String } - 'passing', 'rushing', or 'receiving' stat to get data for
 # Return: { Pandas DataFrame } - Holding the data from that stat over weeks 1 through n that year
-def get_season_stat(year, week, stat):
+def get_season_stat(year, start_week, end_week, stat):
     total_df = pd.DataFrame()
-    for i in range(1,week):
+    for i in range(start_week,end_week):
         cur_df = get_csv_data(year,i,stat)
         total_df = pd.concat([total_df,cur_df],ignore_index=True).reset_index(drop=True)
     return total_df
@@ -36,7 +37,8 @@ def plot_df(df,x_axis,y_axis, annotation):
 
 
 year = 2019
-week = 14
+start_week = 1
+end_week = 17
 player = sys.argv[1]
 stat_type = sys.argv[2].lower()
 
@@ -48,8 +50,8 @@ elif stat_type == "receiving":
     stat_list = ["targets", "rec_yds", "opponent"]
 
 
-df = get_season_stat(2019,14,stat_type)
+df = get_season_stat(year,start_week,end_week,stat_type)
 df = df.loc[df["player"] == player]
-
+print(df.describe())
 plot_df(df[stat_list],stat_list[0],stat_list[1],stat_list[2])
 

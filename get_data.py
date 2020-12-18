@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np
-from functions import scrape_game_url, scrape_week_url, stats_to_dataframe
+from pfr_scraper import scrape_game_url, scrape_week_url, stats_to_dataframe
 
 
 
