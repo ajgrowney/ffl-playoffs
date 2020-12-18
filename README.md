@@ -1,8 +1,16 @@
-# 
+# NFL Football Data Analytics
 
-#### Write multiple week's data
-    for i in `seq 1 16`; do py main.py week $i; done
 
+## Setup
+### Install Requirements
+`pip install -r requirements.txt`
+
+
+### Generate Template Datafiles
+    `sh build-data-year.sh 2019`
+
+### Scrape Data from ProFootball Reference
+    `for week in {1..17}; do python3 scrape_data.py $week 2019; done`
 
 
 ### Advanced Passing Data Columns:
