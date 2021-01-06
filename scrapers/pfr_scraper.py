@@ -11,6 +11,10 @@ class GameObject:
     # Param: table_ids { Dictionary } - keys: [rushing, passing, receiving], values: id used by pro-football-refs
     # Param: teams_abbrev { Set } - Two teams abbreviations playing in the game
     def __init__(self, stat_tables, table_ids, teams_abbrev):
+        self.passing_data, self.passing_categories = [], []
+        self.rushing_data, self.rushing_categories = [], []
+        self.receiving_data, self.receiving_categories = [], []
+        
         for table in stat_tables:
             if table['id'] == table_ids['passing']: 
                 self.passing_categories, self.passing_data = scrape_data_table(table,"passing", teams_abbrev)
@@ -39,7 +43,8 @@ def scrape_data_table(data_table, category, teams):
     header = data_table.find('thead')
     
     # If it is a rushing, passing, or receiving table, scraping player_ids
-    if(category == "rushing" or category == "passing" or category == "receiving"): table_stats.append("player_id")
+    if(category == "rushing" or category == "passing" or category == "receiving"):
+        table_stats.append("player_id")
 
     for data_row in header.find_all('th'):
         table_stats.append(data_row['data-stat'])
@@ -82,7 +87,6 @@ def scrape_game_url(url):
     # Clean HTML for scraping
     html = html.replace('<!--','').replace('-->','')
     SoupObject = BeautifulSoup(html,"html.parser")
-    
     table_ids = {
         "passing": "passing_advanced",
         "rushing": "rushing_advanced",

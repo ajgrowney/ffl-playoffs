@@ -39,6 +39,7 @@ def plot_df(df,x_axis,y_axis, annotation):
 year = 2019
 start_week = 1
 end_week = 17
+
 player = sys.argv[1]
 stat_type = sys.argv[2].lower()
 
