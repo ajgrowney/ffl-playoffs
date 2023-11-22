@@ -10,7 +10,7 @@
     `sh build-data-year.sh 2019`
 
 ### Scrape Data from ProFootball Reference
-    `for week in {1..17}; do python3 scrape_data.py $week 2019; done`
+    `for week in {1..17}; do python3 scrape_data.py week $week 2019; done`
 
 ### Explore Data
     - Use the eda.py file with the following arguments:

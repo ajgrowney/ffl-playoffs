@@ -4,16 +4,17 @@ import numpy as np
 from scrapers.pfr_scraper import scrape_game_url, scrape_week_url, stats_to_dataframe
 
 
+url = "https://www.pro-football-reference.com/"
 
 def pfr_url(year, week):
-    return ("https://www.pro-football-reference.com/years/"+str(year)+"/week_"+str(week)+".htm")
+    return (url + "years/"+str(year)+"/week_"+str(week)+".htm")
 
 def form_csv_path(year, week,stat):
     return("data-"+str(year)+"/"+str(year)+"-"+stat+"-week-"+str(week)+".csv")
 
 def scrape_week_data(year, week):
     print(f"{year} Week {week}")
-    game_urls = ["http://www.pro-football-reference.com/"+u for u in scrape_week_url(pfr_url(year, week))]
+    game_urls = [url+u for u in scrape_week_url(pfr_url(year, week))]
     
     print(f'Found {len(game_urls)} Games')
     current_week_pass_df = pd.read_csv(form_csv_path(year,week,"passing"))
@@ -39,7 +40,7 @@ def scrape_week_data(year, week):
 if len(sys.argv) <= 1: 
     print("Need parameter: [ game, week, year ]")
 elif sys.argv[1] == "game": 
-    game_url = sys.argv[2] if len(sys.argv) == 3 else "https://www.pro-football-reference.com/boxscores/201909220kan.htm"
+    game_url = sys.argv[2] if len(sys.argv) == 3 else url+"boxscores/201909220kan.htm"
     current_week_pass_df = pd.read_csv("data-2019/2019-passing-week-1.csv")
     game = (scrape_game_url(game_url))
     # print(game.passing_data)
